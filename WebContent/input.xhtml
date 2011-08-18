@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="WEB-INF/templates/template.xhtml">
+
+	<ui:define name="content">
+
+		<h:form>
+			<h:panelGrid columns="3">
+				<h:outputText value="#{msg.name}" />
+				<h:inputText value="#{loginBean.name}" title="name" id="name"
+					required="true" />
+				<h:message for="name" style="color:red" />
+				<h:outputText value="#{msg.password}" />
+				<h:inputSecret value="#{loginBean.password}" title="password"
+					id="password" required="true">
+					<f:converter converterId="passwordHasher" for="password"/>
+				</h:inputSecret>
+				<h:message for="password" style="color:red" />
+			</h:panelGrid>
+			<h:commandButton action="#{loginBean.saveCredentials}" value="#{msg.sendButton}" />
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>
