@@ -1,6 +1,5 @@
 package de.bloodink.timers;
 
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.ejb.Timer;
 

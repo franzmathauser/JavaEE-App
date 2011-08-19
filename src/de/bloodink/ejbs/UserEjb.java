@@ -36,6 +36,8 @@ public class UserEjb {
 
 	public void createUser(User user) {
 		em.persist(user);
+		em.flush();
+		System.out.println("createUser..." + user.getName() + ":" + user.getPassword());
 	}
 
 	public void updateUser(User user) {
