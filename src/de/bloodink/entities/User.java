@@ -1,10 +1,13 @@
 package de.bloodink.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 import de.bloodink.security.EncryptListener;
-import de.bloodink.security.annotation.Encrypt;
 
 
 /**
@@ -21,9 +24,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Encrypt
 	private String name;
-	@Encrypt
 	private String password;
 
     public User() {
