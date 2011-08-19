@@ -1,49 +1,74 @@
 package de.bloodink.entities;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 
-import de.bloodink.security.EncryptListener;
-
-
 /**
  * The persistent class for the user database table.
- * 
  */
 @Entity
-@NamedQuery(name = User.FIND_ALL_USERS, query="SELECT u FROM User u")
-@EntityListeners({EncryptListener.class})
-public class User implements Serializable {
-	
-	public static final String FIND_ALL_USERS = "User.findAllUsers";
-	
-	private static final long serialVersionUID = 1L;
+@NamedQuery(name = User.FIND_ALL_USERS, query = "SELECT u FROM User u")
+public class User {
 
-	@Id
-	private String name;
-	private String password;
+    /**
+     * Name of the NamedQuery to receive all users from Database.
+     */
+    public static final String FIND_ALL_USERS = "User.findAllUsers";
 
+    /**
+     * Username of DB.
+     */
+    @Id
+    private String name;
+
+    /**
+     * User Password of DB.
+     */
+    private String password;
+
+    /**
+     * Default Constructor to create a User.
+     */
     public User() {
     }
 
-	public String getName() {
-		return this.name;
-	}
+    /**
+     * Getter of Username.
+     * 
+     * @return username
+     */
+    public final String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * Set Username.
+     * 
+     * @param name
+     *            username
+     */
+    public final void setName(final String name) {
+        this.name = name;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    /**
+     * Getter of User Password.
+     * 
+     * @return passwort hash
+     */
+    public final String getPassword() {
+        return this.password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    /**
+     * Setter of User Password.
+     * 
+     * @param password
+     *            password hash
+     */
+    public final void setPassword(final String password) {
+        this.password = password;
+    }
 
 }

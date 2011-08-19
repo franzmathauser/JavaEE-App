@@ -9,41 +9,75 @@ import javax.persistence.PersistenceContext;
 import de.bloodink.entities.User;
 
 /**
- * Session Bean implementation class HelloBean
+ * Session Bean with businesslogic of a user entity.
  */
 @Stateless
 public class UserEjb {
 
-	@PersistenceContext
-	private EntityManager em;
+    /**
+     * Injected entityManager to perfom db actions.
+     */
+    @PersistenceContext
+    private EntityManager em;
 
-	/**
-	 * Default constructor.
-	 */
-	public UserEjb() {
+    /**
+     * Default constructor.
+     */
+    public UserEjb() {
 
-	}
-	
-	public Collection<User> findUsers(){
-		
-		return em.createNamedQuery(User.FIND_ALL_USERS,User.class).getResultList();
-		
-	}
+    }
 
-	public User findUserByName(String id) {
-		return em.find(User.class, id);
-	}
+    /**
+     * Find all DB users.
+     * 
+     * @return list off all users
+     */
+    public Collection<User> findUsers() {
 
-	public void createUser(User user) {
-		em.persist(user);
-	}
+        return em.createNamedQuery(User.FIND_ALL_USERS, User.class)
+                .getResultList();
 
-	public void updateUser(User user) {
-		em.merge(user);
-	}
+    }
 
-	public void deleteUser(User user) {
-		em.remove(em.merge(user));
+    /**
+     * Find a user by primarykey.
+     * 
+     * @param id
+     *            username
+     * @return db user
+     */
+    public User findUserByName(String id) {
+        return em.find(User.class, id);
+    }
 
-	}
+    /**
+     * persist a user into db.
+     * 
+     * @param user
+     *            user to persist
+     */
+    public void createUser(User user) {
+        em.persist(user);
+    }
+
+    /**
+     * updates a db user.
+     * 
+     * @param user
+     *            user to update
+     */
+    public void updateUser(User user) {
+        em.merge(user);
+    }
+
+    /**
+     * delete a user from db.
+     * 
+     * @param user
+     *            user to be deleted
+     */
+    public void deleteUser(User user) {
+        em.remove(em.merge(user));
+
+    }
 }
