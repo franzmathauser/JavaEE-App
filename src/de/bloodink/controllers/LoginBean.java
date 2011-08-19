@@ -10,66 +10,113 @@ import de.bloodink.ejbs.UserEjb;
 import de.bloodink.entities.User;
 import de.bloodink.helper.PasswordHasher;
 
+/**
+ * Login Bean is ein JSF Controller, der die Logindaten abfängt und ein User an
+ * eine EJB weiterreicht.
+ * 
+ * @author Franz Mathauser
+ */
 @ManagedBean
 @SessionScoped
 public class LoginBean {
 
-	@EJB
-	UserEjb userEjb;
+    /**
+     * Injected EJB, which holds business logic of User.
+     */
+    @EJB
+    UserEjb userEjb;
 
-	private String name;
-	private String password;
+    /**
+     * Username.
+     */
+    private String name;
+    /**
+     * Password.
+     */
+    private String password;
 
-	private User dbUser;
+    /**
+     * User received vom Database with same name as loginname.
+     */
+    private User dbUser;
 
-	public LoginBean() {
-		new PasswordHasher();
-	}
+    /**
+     * Default Constructror for POJO.
+     */
+    public LoginBean() {
+        new PasswordHasher();
+    }
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * Get username of bean.
+     * 
+     * @return username
+     */
+    public String getName() {
+        return name;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * Get password of bean.
+     * 
+     * @return user password
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * Set username of bean.
+     * 
+     * @param name
+     *            username
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPassword(String password) {
+    /**
+     * Set password of bean.
+     * 
+     * @param password
+     *            password
+     */
+    public void setPassword(String password) {
 
-		this.password = password;
-	}
+        this.password = password;
+    }
 
-	public String saveCredentials() {
-		User user = new User();
-		user.setName(name);
-		user.setPassword(password);
+    /**
+     * Lädt User Entity aus der Datenbank, wenn username vorhanden. userpassword
+     * = dbuserpassword => welcome userpassword != dbuserpassword => error null
+     * = dbuserpassword => create
+     * 
+     * @return navigation action
+     */
+    public String saveCredentials() {
+        User user = new User();
+        user.setName(name);
+        user.setPassword(password);
 
-		dbUser = userEjb.findUserByName(name);
-		if (dbUser == null) {
-			userEjb.createUser(user);
-		} else {
-			if (password.equals(dbUser.getPassword()))
-				return "welcome";
-			else
-				return "loginerror";
-		}
+        dbUser = userEjb.findUserByName(name);
+        if (dbUser == null) {
+            userEjb.createUser(user);
+        } else {
+            if (password.equals(dbUser.getPassword()))
+                return "welcome";
+            else
+                return "loginerror";
+        }
 
-		return "usercreated";
-	}
+        return "usercreated";
+    }
 
-	public User getDbUser() {
-		return dbUser;
-	}
-
-	public void setDbUser(User dbUser) {
-		this.dbUser = dbUser;
-	}
-	
-	public Collection<User> getAllUsers(){
-		return userEjb.findUsers();
-	}
+    /**
+     * Receive all persistent users from database.
+     * 
+     * @return all users
+     */
+    public Collection<User> getAllUsers() {
+        return userEjb.findUsers();
+    }
 }
