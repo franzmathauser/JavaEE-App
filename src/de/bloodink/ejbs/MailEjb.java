@@ -1,27 +1,41 @@
 package de.bloodink.ejbs;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.ejb.Stateless;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 
+@Stateless
 public class MailEjb {
 
-    @Resource(name = "jdbc/javamail")
-    private Session ms;
+    @Resource(mappedName = "jdbc/jmsConnectionFactory")
+    private ConnectionFactory connectionFactory;
 
-    public MimeMessage getInstance() {
-        return new MimeMessage(ms);
-    }
+    @Resource(mappedName = "jdbc/jmsQueue")
+    private Queue queue;
 
-    public boolean sendMail(MimeMessage msg) {
+    public boolean sendMail() {
 
         try {
-            msg.setFrom(new InternetAddress("franz.mathauser@googlemail.com"));
-            javax.mail.Transport.send(msg);
+            // msg.setFrom(new
+            // InternetAddress("franz.mathauser@googlemail.com"));
+            Connection connection = connectionFactory.createConnection();
+            javax.jms.Session session = connection.createSession(false,
+                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            MessageProducer producer = session.createProducer(queue);
 
-        } catch (MessagingException e) {
+            // Sends an object message to the queue
+            ObjectMessage message = session.createObjectMessage();
+            message.setObject("Das ist ein TEST");
+            // message.setFloatProperty("orderAmount", totalAmount);
+            producer.send(message);
+            connection.close();
+
+        } catch (JMSException e) {
             e.printStackTrace();
             return false;
         }

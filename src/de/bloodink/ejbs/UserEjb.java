@@ -2,6 +2,7 @@ package de.bloodink.ejbs;
 
 import java.util.Collection;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +20,9 @@ public class UserEjb {
      */
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private MailEjb mailer;
 
     /**
      * Default constructor.
@@ -59,6 +63,8 @@ public class UserEjb {
     public void createUser(User u) {
 
         em.persist(u);
+        mailer.sendMail();
+
     }
 
     /**

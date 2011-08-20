@@ -1,17 +1,14 @@
 package de.bloodink.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-
-import de.bloodink.listener.UserEntityListener;
 
 /**
  * The persistent class for the user database table.
  */
 @Entity
-@EntityListeners({ UserEntityListener.class })
+// @EntityListeners({ UserEntityListener.class })
 @NamedQuery(name = User.FIND_ALL_USERS, query = "SELECT u FROM User u")
 public class User {
 
