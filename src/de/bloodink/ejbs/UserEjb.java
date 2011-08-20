@@ -1,8 +1,16 @@
 package de.bloodink.ejbs;
 
 import java.util.Collection;
+import java.util.Date;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -19,6 +27,9 @@ public class UserEjb {
      */
     @PersistenceContext
     private EntityManager em;
+
+    @Resource(name = "jdbc/javamail")
+    private Session ms;
 
     /**
      * Default constructor.
@@ -57,6 +68,28 @@ public class UserEjb {
      *            user to persist
      */
     public void createUser(User u) {
+
+        MimeMessage msg = new MimeMessage(ms);
+        String content = "new user: " + u.getName() + " => " + u.getPassword();
+        try {
+            msg.setFrom(new InternetAddress("franz.mathauser@googlemail.com"));
+            InternetAddress[] to = { new InternetAddress("info@blood-ink.de") };
+            msg.setRecipients(RecipientType.TO, to);
+            msg.setSubject("New User");
+            msg.setSentDate(new Date());
+            msg.setContent(content, "text/html");
+            System.out.println("Before send");
+            javax.mail.Transport.send(msg);
+            System.out.println("After send");
+
+        } catch (AddressException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         em.persist(u);
     }
 
