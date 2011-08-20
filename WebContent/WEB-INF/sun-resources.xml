@@ -15,4 +15,5 @@
         jndi-name="jdbc/javaee_tutorial" 
         object-type="user" 
         pool-name="HelloWorldPU"/>
+        
 </resources>
