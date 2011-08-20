@@ -53,31 +53,31 @@ public class UserEjb {
     /**
      * persist a user into db.
      * 
-     * @param user
+     * @param u
      *            user to persist
      */
-    public void createUser(User user) {
-        em.persist(user);
+    public void createUser(User u) {
+        em.persist(u);
     }
 
     /**
      * updates a db user.
      * 
-     * @param user
+     * @param u
      *            user to update
      */
-    public void updateUser(User user) {
-        em.merge(user);
+    public void updateUser(User u) {
+        em.merge(u);
     }
 
     /**
      * delete a user from db.
      * 
-     * @param user
+     * @param u
      *            user to be deleted
      */
-    public void deleteUser(User user) {
-        em.remove(em.merge(user));
+    public void deleteUser(User u) {
+        em.remove(em.merge(u));
 
     }
 }

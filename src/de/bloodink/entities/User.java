@@ -38,18 +38,18 @@ public class User {
      * 
      * @return username
      */
-    public final String getName() {
+    public String getName() {
         return this.name;
     }
 
     /**
      * Set Username.
      * 
-     * @param name
+     * @param n
      *            username
      */
-    public final void setName(final String name) {
-        this.name = name;
+    public void setName(String n) {
+        this.name = n;
     }
 
     /**
@@ -57,18 +57,18 @@ public class User {
      * 
      * @return passwort hash
      */
-    public final String getPassword() {
+    public String getPassword() {
         return this.password;
     }
 
     /**
      * Setter of User Password.
      * 
-     * @param password
+     * @param p
      *            password hash
      */
-    public final void setPassword(final String password) {
-        this.password = password;
+    public void setPassword(String p) {
+        this.password = p;
     }
 
 }

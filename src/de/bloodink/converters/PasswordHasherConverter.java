@@ -20,7 +20,7 @@ public class PasswordHasherConverter implements Converter {
     /**
      * hasher object.
      */
-    PasswordHasher ph = new PasswordHasher();;
+    private final PasswordHasher ph = new PasswordHasher();;
 
     @Override
     public Object getAsObject(FacesContext ctx, UIComponent component,

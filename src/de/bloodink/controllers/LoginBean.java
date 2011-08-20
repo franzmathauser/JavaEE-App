@@ -24,7 +24,7 @@ public class LoginBean {
      * Injected EJB, which holds business logic of User.
      */
     @EJB
-    UserEjb userEjb;
+    private UserEjb userEjb;
 
     /**
      * Username.
@@ -68,22 +68,22 @@ public class LoginBean {
     /**
      * Set username of bean.
      * 
-     * @param name
+     * @param n
      *            username
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String n) {
+        this.name = n;
     }
 
     /**
      * Set password of bean.
      * 
-     * @param password
+     * @param p
      *            password
      */
-    public void setPassword(String password) {
+    public void setPassword(String p) {
 
-        this.password = password;
+        this.password = p;
     }
 
     /**
@@ -102,10 +102,11 @@ public class LoginBean {
         if (dbUser == null) {
             userEjb.createUser(user);
         } else {
-            if (password.equals(dbUser.getPassword()))
+            if (password.equals(dbUser.getPassword())) {
                 return "welcome";
-            else
+            } else {
                 return "loginerror";
+            }
         }
 
         return "usercreated";

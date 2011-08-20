@@ -2,8 +2,6 @@ package de.bloodink.security;
 
 import java.lang.reflect.Field;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -23,10 +21,9 @@ import de.bloodink.security.annotation.Encrypt;
 public class EncryptListener {
 
     /**
-     * Injected EntityManager to perform db actions.
+     * Encryption Pattern.
      */
-    @PersistenceContext
-    EntityManager em;
+    public static final String ENCRYPTION_PREFIX = "XXX";
 
     /**
      * Das Entity wird durchsucht ob eine Membervariable eine Encrypt Annotation
@@ -47,7 +44,8 @@ public class EncryptListener {
                     System.out.println("fetch value"
                             + field.get(obj).toString());
 
-                    String newValue = "XXX" + field.get(obj).toString();
+                    String newValue = ENCRYPTION_PREFIX
+                            + field.get(obj).toString();
                     // obj.setPassword(newValue);
                     field.set(obj, newValue);
                     field.setAccessible(false);
@@ -80,7 +78,8 @@ public class EncryptListener {
                     System.out.println("fetch value"
                             + field.get(obj).toString());
 
-                    String newValue = field.get(obj).toString().substring(3);
+                    String newValue = field.get(obj).toString()
+                            .substring(ENCRYPTION_PREFIX.length());
                     // obj.setPassword(newValue);
                     field.set(obj, newValue);
                     field.setAccessible(false);
