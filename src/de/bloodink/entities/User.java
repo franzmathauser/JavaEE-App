@@ -8,6 +8,7 @@ import javax.persistence.NamedQuery;
  * The persistent class for the user database table.
  */
 @Entity
+// @EntityListeners({ UserEntityListener.class })
 @NamedQuery(name = User.FIND_ALL_USERS, query = "SELECT u FROM User u")
 public class User {
 

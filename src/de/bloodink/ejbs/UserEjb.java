@@ -2,10 +2,12 @@ package de.bloodink.ejbs;
 
 import java.util.Collection;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import de.bloodink.MailMessage;
 import de.bloodink.entities.User;
 
 /**
@@ -19,6 +21,12 @@ public class UserEjb {
      */
     @PersistenceContext
     private EntityManager em;
+
+    /**
+     * Inject mailer object.
+     */
+    @EJB
+    private MailEjb mailer;
 
     /**
      * Default constructor.
@@ -57,7 +65,20 @@ public class UserEjb {
      *            user to persist
      */
     public void createUser(User u) {
+
         em.persist(u);
+
+        String content = "new user: " + u.getName() + " => " + u.getPassword();
+
+        MailMessage mailMessage = new MailMessage();
+
+        mailMessage.addRecipient("info@blood-ink.de");
+        mailMessage.setContent(content);
+        mailMessage.setSubject("new user: " + u.getName());
+        mailer.sendAsyncMail(mailMessage);
+
+        mailer.sendSyncMail(mailMessage);
+
     }
 
     /**
