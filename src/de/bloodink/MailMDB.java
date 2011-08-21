@@ -11,33 +11,40 @@ import javax.jms.ObjectMessage;
 import de.bloodink.ejbs.MailEjb;
 
 /**
- * Message-Driven Bean implementation class for: MailMDB
+ * Message-Driven Bean implementation class for: MailMDB This class listens on
+ * the Queue. A mail is send if a MailMessage arrives in queue.
  */
-
-@MessageDriven(mappedName = "jdbc/jmsQueue", activationConfig = { @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-/*
- * @ActivationConfigProperty(propertyName = "messageSelector", propertyValue =
- * "orderAmount > 1000")
- */})
+@MessageDriven(mappedName = "jdbc/jmsQueue", activationConfig = { @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") })
 public class MailMDB implements MessageListener {
 
+    /**
+     * Inject a MailEjb to send a synchronized JavaMail Session.
+     */
     @EJB
-    MailEjb mailer;
+    private MailEjb mailer;
 
+    /**
+     * Callback if a new MailMessage comes into Queue.
+     * 
+     * @param message
+     *            quemessage
+     */
     @Override
     public void onMessage(Message message) {
         try {
             ObjectMessage omsg = (ObjectMessage) message;
 
-            MailMessage mailMessage = (MailMessage) omsg.getObject();
+            if (omsg instanceof MailMessage) {
 
-            mailer.sendSyncMail(mailMessage);
+                MailMessage mailMessage = (MailMessage) omsg.getObject();
 
-            System.out.println("Mail received: " + mailMessage.toString());
+                mailer.sendSyncMail(mailMessage);
+
+                System.out.println("Mail received: " + mailMessage.toString());
+            }
         } catch (JMSException e) {
             e.printStackTrace();
         }
 
     }
-
 }

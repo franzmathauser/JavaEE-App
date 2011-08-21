@@ -22,18 +22,40 @@ import javax.mail.internet.MimeMessage;
 
 import de.bloodink.MailMessage;
 
+/**
+ * MailEjb takes care of sending Emails. It's possible to send Synchronious and
+ * Asynchronious mails
+ * 
+ * @author Franz Mathauser
+ */
 @Stateless
 public class MailEjb {
 
+    /**
+     * Inject jms connectionFactory.
+     */
     @Resource(mappedName = "jdbc/jmsConnectionFactory")
     private ConnectionFactory connectionFactory;
 
+    /**
+     * Inject jms queue.
+     */
     @Resource(mappedName = "jdbc/jmsQueue")
     private Queue queue;
 
+    /**
+     * Inject javamail ressource.
+     */
     @Resource(name = "jdbc/javamail")
     private Session ms;
 
+    /**
+     * Sends a MailMessage to a jms queue, which takes care of message delivery.
+     * 
+     * @param mailMessage
+     *            mail information
+     * @return send status
+     */
     public boolean sendAsyncMail(MailMessage mailMessage) {
 
         try {
@@ -59,20 +81,37 @@ public class MailEjb {
         return true;
     }
 
-    public void sendSyncMail(MailMessage mailMessage) {
+    /**
+     * Sends a MailMessage in a synchronious way.
+     * 
+     * @param mailMessage
+     *            mail information
+     * @return send status
+     */
+    public boolean sendSyncMail(MailMessage mailMessage) {
 
-        MimeMessage msg = convertMailMessageToMimeMessage(mailMessage);
+        MimeMessage msg = createMimeMessage(mailMessage);
 
         try {
             Transport.send(msg);
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         }
+        return true;
 
     }
 
-    private MimeMessage convertMailMessageToMimeMessage(MailMessage mailMessage) {
+    /**
+     * Transforms a MailMessage to a MimeMessage, which can be send with
+     * javamail.
+     * 
+     * @param mailMessage
+     *            mail information
+     * @return converted MimeMessage
+     */
+    private MimeMessage createMimeMessage(MailMessage mailMessage) {
         MimeMessage msg = new MimeMessage(ms);
         try {
             List<InternetAddress> to = new ArrayList<InternetAddress>();

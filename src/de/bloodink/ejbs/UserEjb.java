@@ -22,8 +22,11 @@ public class UserEjb {
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Inject mailer object.
+     */
     @EJB
-    MailEjb mailer;
+    private MailEjb mailer;
 
     /**
      * Default constructor.
