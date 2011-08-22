@@ -1,6 +1,7 @@
 package de.bloodink.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the user database table.
@@ -45,6 +48,10 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
     @JoinColumn(name = "user_fk")
     private List<Password> passwords = new ArrayList<Password>();
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(nullable = false, insertable = true, updatable = false)
+    private Date createdate;
 
     /**
      * Default Constructor to create a User.
@@ -90,7 +97,15 @@ public class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", name=" + name + ", passwords=" + passwords
-                + "]";
+                + ", createdate=" + createdate + "]";
+    }
+
+    public Date getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(Date createdate) {
+        this.createdate = createdate;
     }
 
 }

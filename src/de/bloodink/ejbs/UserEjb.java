@@ -138,10 +138,12 @@ public class UserEjb {
         User dbUser = findUserByName(user.getName());
         System.out.println("login method: " + dbUser);
         if (dbUser != null) {
+            em.refresh(dbUser);
             Password pw = user.getPasswords().get(0);
             Long salt = Long.parseLong(dbUser.getPasswords().get(0).getSalt());
+            Date createDate = dbUser.getCreatedate();
 
-            PasswordHasher ph = new PasswordHasher(salt);
+            PasswordHasher ph = new PasswordHasher(salt, createDate);
 
             try {
                 status = ph.verifyPassword(pw.getHash(), dbUser.getPasswords()
@@ -163,6 +165,8 @@ public class UserEjb {
         if (dbUser == null) {
 
             PasswordHasher ph = new PasswordHasher();
+            user.setCreatedate(ph.getCreateDate());
+
             try {
 
                 Password pw = user.getPasswords().get(0);
