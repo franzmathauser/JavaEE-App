@@ -139,8 +139,9 @@ public class UserEjb {
         System.out.println("login method: " + dbUser);
         if (dbUser != null) {
             Password pw = user.getPasswords().get(0);
-            PasswordHasher ph = new PasswordHasher(dbUser.getPasswords().get(0)
-                    .getSalt());
+            Long salt = Long.parseLong(dbUser.getPasswords().get(0).getSalt());
+
+            PasswordHasher ph = new PasswordHasher(salt);
 
             try {
                 status = ph.verifyPassword(pw.getHash(), dbUser.getPasswords()
@@ -168,14 +169,14 @@ public class UserEjb {
                 String hash = ph.hashPassword(pw.getHash());
                 pw.setHash(hash);
 
-                pw.setSalt(ph.getSalt());
+                pw.setSalt(ph.getSalt().toString());
                 pw.setCreateDate(new Date());
 
                 createUser(user);
 
                 status = true;
             } catch (NoSuchAlgorithmException e) {
-
+                // TODO Auto-generated catch block
             }
 
         }

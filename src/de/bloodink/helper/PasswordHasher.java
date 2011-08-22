@@ -5,16 +5,16 @@ import java.security.SecureRandom;
 
 public class PasswordHasher extends Sha512Hasher {
 
-    private final String salt;
+    private final Long salt;
 
     public PasswordHasher() {
         super();
         SecureRandom sr = new SecureRandom();
-        this.salt = "" + sr.nextLong();
+        this.salt = sr.nextLong();
 
     }
 
-    public PasswordHasher(String salt) {
+    public PasswordHasher(Long salt) {
         super();
         this.salt = salt;
 
@@ -22,20 +22,19 @@ public class PasswordHasher extends Sha512Hasher {
 
     public String hashPassword(String password) throws NoSuchAlgorithmException {
 
-        int power = Integer.parseInt(salt.charAt(salt.length() - 1) + "");
+        int power = (int) (salt % 10);
         int rounds = (int) Math.pow(2, power);
 
-        password = password + salt;
-        String hash = super.hashPassword(password.getBytes());
+        String hash = password;
 
         // multiple hashing
         for (int i = 0; i < rounds; i++) {
-            if (i % 2 == 0) {
-                hash = password + hash;
-            } else {
-                hash = hash + salt;
-            }
 
+            if (i % 2 == 0) {
+                hash = hash + salt;
+            } else {
+                hash = password + hash;
+            }
             hash = super.hashPassword(hash.getBytes());
         }
 
@@ -49,7 +48,7 @@ public class PasswordHasher extends Sha512Hasher {
 
     }
 
-    public String getSalt() {
+    public Long getSalt() {
         return salt;
     }
 }
