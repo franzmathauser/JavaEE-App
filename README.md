@@ -32,6 +32,7 @@ additional-properties:
 JMS
 ---
 The following set up a jms connection factory and a queue.
+
 The queue is used to send asynchronious mails.
 
 1. asadmin create-jms-resource --restype javax.jms.ConnectionFactory jdbc/jmsConnectionFactory
@@ -39,18 +40,24 @@ The queue is used to send asynchronious mails.
 
 Log4j
 -----
-Log4j is a Logging-Framework for Java-Environment. The jar is included in WebContent/WEB-INF/lib directory.
+Log4j is a Logging-Framework for Java-Environment. The jar is included in 'WebContent/WEB-INF/lib directory'.
+
 The configuration is done by the file:
+
     WebContent/WEB-INF/log4j.properties
+
 Make sure to point the log file to a valid directory on your system.
-    Change the Loglevel on Runtime
-    ------------------------------
-    1. change propertiesfile and request: https://localhost:8181/HelloWorld/init?reloadPropertiesFile=ok
-    2. set Loglevel Mode via Request: https://localhost:8181/HelloWorld/init?logLevel=DEBUG
+
+### Change the Loglevel on Runtime
+1. change propertiesfile and request: https://localhost:8181/HelloWorld/init?reloadPropertiesFile=ok
+2. set Loglevel Mode via Request: https://localhost:8181/HelloWorld/init?logLevel=DEBUG
 
 MySQL
 -----
 Mysql-Conector is placed into GLASSFISH_HOME/lib folder.
+
 The JDBC-Ressource is deployed via:
+
     WEBContent/WEB-INF/sun-resources.xml
+    
 Change connection setting if needed.
