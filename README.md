@@ -40,7 +40,7 @@ The queue is used to send asynchronious mails.
 
 Log4j
 -----
-Log4j is a Logging-Framework for Java-Environment. The jar is included in 'WebContent/WEB-INF/lib directory'.
+Log4j is a Logging-Framework for Java-Environment. The jar is included in `WebContent/WEB-INF/lib directory`.
 
 The configuration is done by the file:
 
@@ -54,10 +54,10 @@ Make sure to point the log file to a valid directory on your system.
 
 MySQL
 -----
-Mysql-Conector is placed into GLASSFISH_HOME/lib folder.
+Mysql-Conector is placed into `GLASSFISH_HOME/lib` folder.
 
 The JDBC-Ressource is deployed via:
 
     WEBContent/WEB-INF/sun-resources.xml
     
-Change connection setting if needed.
+Change connection settings if needed.
