@@ -4,11 +4,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 public class PasswordHasher extends Sha512Hasher {
 
     private final Long salt;
 
     private final Date createDate;
+
+    private static final Logger log = Logger.getLogger(PasswordHasher.class);
 
     public PasswordHasher() {
         super();
@@ -32,11 +36,11 @@ public class PasswordHasher extends Sha512Hasher {
         int rounds = (int) Math.pow(2, power);
         long millis = createDate.getTime();
 
-        // Should be in a Loger sometime
-        System.out.println("SALT:----------|" + salt);
-        System.out.println("POWER:---------|" + power);
-        System.out.println("MILLIS:--------|" + millis);
-        System.out.println("ROUNDS:--------|" + rounds);
+        if (log.isDebugEnabled()) {
+            log.debug("salt:" + salt + " power:" + power + " millis:" + millis
+                    + " rounds:" + rounds);
+        }
+
         String hash = password;
 
         // multiple hashing

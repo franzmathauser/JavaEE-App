@@ -20,6 +20,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
+
 import de.bloodink.MailMessage;
 
 /**
@@ -49,6 +51,8 @@ public class MailEjb {
     @Resource(name = "jdbc/javamail")
     private Session ms;
 
+    private static final Logger log = Logger.getLogger(MailEjb.class);
+
     /**
      * Sends a MailMessage to a jms queue, which takes care of message delivery.
      * 
@@ -63,6 +67,7 @@ public class MailEjb {
             Connection connection = connectionFactory.createConnection();
             javax.jms.Session session = connection.createSession(false,
                     javax.jms.Session.AUTO_ACKNOWLEDGE);
+
             MessageProducer producer = session.createProducer(queue);
 
             // Sends an object message to the queue
@@ -89,6 +94,11 @@ public class MailEjb {
      * @return send status
      */
     public boolean sendSyncMail(MailMessage mailMessage) {
+
+        if (log.isInfoEnabled()) {
+            log.info("send mail: " + mailMessage.getSubject() + " to: "
+                    + mailMessage.getRecipients());
+        }
 
         MimeMessage msg = createMimeMessage(mailMessage);
 
