@@ -19,11 +19,11 @@
 				<h:outputText value="#{msg.password}" />
 				<h:inputSecret value="#{loginBean.password}" title="password"
 					id="password" required="true">
-					<f:converter converterId="passwordHasher" for="password"/>
 				</h:inputSecret>
 				<h:message for="password" style="color:red" />
 			</h:panelGrid>
-			<h:commandButton action="#{loginBean.saveCredentials}" value="#{msg.sendButton}" />
+			<h:commandButton action="#{loginBean.register}" value="Register" />
+			<h:commandButton action="#{loginBean.login}" value="Login" />
 		</h:form>
 	</ui:define>
 

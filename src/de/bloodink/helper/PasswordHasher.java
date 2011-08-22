@@ -1,54 +1,55 @@
 package de.bloodink.helper;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+public class PasswordHasher extends Sha512Hasher {
 
-/**
- * PasswordHasher can be used to transform clear text into a one-way
- * Hashfunction or verify a haseh value with with clear text. SHA-512 is used to
- * generate the Hash the value.
- * 
- * @author Franz Mathauser
- */
-public class PasswordHasher {
+    private final String salt;
 
-    /**
-     * Hash algorithm.
-     */
-    public static final String HASH_ALGORITHM = "SHA-512";
+    public PasswordHasher() {
+        super();
+        SecureRandom sr = new SecureRandom();
+        this.salt = "" + sr.nextLong();
 
-    /**
-     * Creates a hash value from input param.
-     * 
-     * @param passwordBytes
-     *            cleartext
-     * @return hashed value
-     * @throws NoSuchAlgorithmException
-     *             hash algorithm not found
-     */
-    public String hashPassword(byte[] passwordBytes)
-            throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
-        byte[] hashBytes = digest.digest(passwordBytes);
-        String hashString = Base64.encode(hashBytes);
-        return hashString;
     }
 
-    /**
-     * Verifyes a hashvalue with cleartext.
-     * 
-     * @param passwordBytes
-     *            cleartext
-     * @param hashString
-     *            hashed value
-     * @return result
-     * @throws NoSuchAlgorithmException
-     *             hash algorithm not found
-     */
-    public boolean verifyPassword(byte[] passwordBytes, String hashString)
+    public PasswordHasher(String salt) {
+        super();
+        this.salt = salt;
+
+    }
+
+    public String hashPassword(String password) throws NoSuchAlgorithmException {
+
+        int power = Integer.parseInt(salt.charAt(salt.length() - 1) + "");
+        int rounds = (int) Math.pow(2, power);
+
+        password = password + salt;
+        String hash = super.hashPassword(password.getBytes());
+
+        // multiple hashing
+        for (int i = 0; i < rounds; i++) {
+            if (i % 2 == 0) {
+                hash = password + hash;
+            } else {
+                hash = hash + salt;
+            }
+
+            hash = super.hashPassword(hash.getBytes());
+        }
+
+        return hash;
+    }
+
+    public boolean verifyPassword(String password, String hashString)
             throws NoSuchAlgorithmException {
-        return hashPassword(passwordBytes).equals(hashString);
+
+        return hashPassword(password).equals(hashString);
+
+    }
+
+    public String getSalt() {
+        return salt;
     }
 }

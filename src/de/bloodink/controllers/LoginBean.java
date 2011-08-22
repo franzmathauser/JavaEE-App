@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 
 import de.bloodink.ejbs.UserEjb;
+import de.bloodink.entities.Password;
 import de.bloodink.entities.User;
-import de.bloodink.helper.PasswordHasher;
 
 /**
  * Login Bean is ein JSF Controller, der die Logindaten abfängt und ein User an
@@ -17,7 +17,7 @@ import de.bloodink.helper.PasswordHasher;
  * @author Franz Mathauser
  */
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class LoginBean {
 
     /**
@@ -34,18 +34,6 @@ public class LoginBean {
      * Password.
      */
     private String password;
-
-    /**
-     * User received vom Database with same name as loginname.
-     */
-    private User dbUser;
-
-    /**
-     * Default Constructror for POJO.
-     */
-    public LoginBean() {
-        new PasswordHasher();
-    }
 
     /**
      * Get username of bean.
@@ -93,23 +81,33 @@ public class LoginBean {
      * 
      * @return navigation action
      */
-    public String saveCredentials() {
+    public String login() {
+
         User user = new User();
         user.setName(name);
-        user.setPassword(password);
+        user.getPasswords().add(new Password(password));
 
-        dbUser = userEjb.findUserByName(name);
-        if (dbUser == null) {
-            userEjb.createUser(user);
+        // user.setPassword(password);
+
+        if (userEjb.login(user)) {
+            return "welcome";
         } else {
-            if (password.equals(dbUser.getPassword())) {
-                return "welcome";
-            } else {
-                return "loginerror";
-            }
+            return "loginerror";
         }
+    }
 
-        return "usercreated";
+    public String register() {
+        User user = new User();
+        user.setName(name);
+        user.getPasswords().add(new Password(password));
+        // user.setPassword(password);
+
+        if (userEjb.register(user)) {
+            // login();
+            return "usercreated";
+        } else {
+            return "loginerror";
+        }
     }
 
     /**

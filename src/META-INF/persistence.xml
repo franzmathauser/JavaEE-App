@@ -4,9 +4,10 @@
 	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>jdbc/javaee_tutorial</jta-data-source>
 		<class>de.bloodink.entities.User</class>
+		<class>de.bloodink.entities.Password</class>
 		<properties>
 			<property name="eclipselink.logging.level" value="FINEST"/>
-			<property name="eclipselink.ddl-generation" value="create-tables"/>
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
 		</properties>
 
 	</persistence-unit>
