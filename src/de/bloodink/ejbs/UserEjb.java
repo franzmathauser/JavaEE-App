@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
+import org.apache.log4j.Logger;
+
 import de.bloodink.MailMessage;
 import de.bloodink.entities.Password;
 import de.bloodink.entities.User;
@@ -20,6 +22,8 @@ import de.bloodink.helper.PasswordHasher;
  */
 @Stateless
 public class UserEjb {
+
+    private final static Logger log = Logger.getLogger(UserEjb.class);
 
     /**
      * Injected entityManager to perfom db actions.
@@ -139,15 +143,17 @@ public class UserEjb {
         System.out.println("login method: " + dbUser);
         if (dbUser != null) {
             em.refresh(dbUser);
-            Password pw = user.getPasswords().get(0);
-            Long salt = Long.parseLong(dbUser.getPasswords().get(0).getSalt());
+            Password pw = user.getCurrentPassword();
+            log.info("login-input:" + pw + " db password:"
+                    + dbUser.getCurrentPassword() + " whole-user:" + dbUser);
+            Long salt = Long.parseLong(dbUser.getCurrentPassword().getSalt());
             Date createDate = dbUser.getCreatedate();
 
             PasswordHasher ph = new PasswordHasher(salt, createDate);
 
             try {
-                status = ph.verifyPassword(pw.getHash(), dbUser.getPasswords()
-                        .get(0).getHash());
+                status = ph.verifyPassword(pw.getHash(), dbUser
+                        .getCurrentPassword().getHash());
             } catch (NoSuchAlgorithmException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

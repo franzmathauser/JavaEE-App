@@ -1,6 +1,7 @@
 package de.bloodink.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class User {
      */
     public static final String FIND_ALL_USERS = "User.findAllUsers";
     public static final String FIND_USER_BY_NAME = "User.findUserByName";
+    public static final String FIND_CURRENT_PASSWORD = "User.findCurrentPassword";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,7 +47,7 @@ public class User {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+    @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinColumn(name = "user_fk")
     private List<Password> passwords = new ArrayList<Password>();
 
@@ -108,4 +110,12 @@ public class User {
         this.createdate = createdate;
     }
 
+    public Password getCurrentPassword() {
+
+        Collections.sort(passwords);
+        for (Password p : passwords)
+            return p;
+        return null;
+
+    }
 }

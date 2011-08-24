@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
  * Entity implementation class for Entity: Password
  */
 @Entity
-public class Password implements Serializable {
+public class Password implements Serializable, Comparable<Password> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -83,4 +83,8 @@ public class Password implements Serializable {
                 + ", createDate=" + createDate + ", valid=" + valid + "]";
     }
 
+    @Override
+    public int compareTo(Password o) {
+        return o.getCreateDate().compareTo(createDate);
+    }
 }
